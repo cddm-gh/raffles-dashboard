@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useState, useCallback, JSX } from "react"
+import { createContext, useContext, useState, useCallback, JSX, useEffect } from "react"
 import type { SidebarContextType } from "@/types/sidebar"
 
 const SidebarContext = createContext<SidebarContextType | undefined>(undefined)
@@ -21,13 +21,33 @@ export function SidebarProvider({ children }: SidebarProviderProps): JSX.Element
     setIsMobileOpen((prev) => !prev)
   }, [])
 
+  // Close mobile menu on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024 && isMobileOpen) {
+        setIsMobileOpen(false)
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [isMobileOpen])
+
+  // Handle mobile navigation
+  const handleMobileNavigation = useCallback((): void => {
+    if (window.innerWidth < 1024) {
+      setIsMobileOpen(false)
+    }
+  }, [])
+
   return (
     <SidebarContext.Provider 
       value={{ 
         isCollapsed, 
         isMobileOpen, 
         toggleCollapse, 
-        toggleMobileMenu 
+        toggleMobileMenu,
+        handleMobileNavigation 
       }}
     >
       {children}

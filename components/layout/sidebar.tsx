@@ -54,7 +54,7 @@ const sidebarItems: SidebarItem[] = [
 
 export function Sidebar(): JSX.Element {
   const pathname = usePathname()
-  const { isCollapsed, isMobileOpen, toggleCollapse, toggleMobileMenu } = useSidebar()
+  const { isCollapsed, isMobileOpen, toggleCollapse, toggleMobileMenu, handleMobileNavigation } = useSidebar()
 
   return (
     <>
@@ -101,11 +101,7 @@ export function Sidebar(): JSX.Element {
               <Link
                 key={item.href}
                 href={item.href}
-                onClick={() => {
-                  if (window.innerWidth < 1024) {
-                    toggleMobileMenu()
-                  }
-                }}
+                onClick={handleMobileNavigation}
                 className={cn(
                   "flex items-center gap-x-2 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-300",
                   "hover:bg-accent hover:text-accent-foreground",
@@ -131,16 +127,16 @@ export function Sidebar(): JSX.Element {
           variant="ghost"
           size="icon"
           className={cn(
-            "absolute -right-4 top-4 h-8 w-8 rounded-full border bg-background",
-            "hidden lg:flex"
+            "absolute -right-3 top-4 h-10 w-10 rounded-full border bg-background",
+            "hidden lg:flex items-center justify-center",
           )}
           onClick={toggleCollapse}
           aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           {isCollapsed ? (
-            <ChevronRight className="h-4 w-4" />
+            <ChevronRight className="h-5 w-5 -ml-0.5" />
           ) : (
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-5 w-5 -ml-0.5" />
           )}
         </Button>
       </aside>

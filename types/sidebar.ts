@@ -1,7 +1,9 @@
+import { LucideIcon } from "lucide-react"
+
 export interface SidebarItem {
   title: string
   href: string
-  icon: React.ComponentType<{ className?: string }>
+  icon: LucideIcon
 }
 
 export interface SidebarContextType {
@@ -9,4 +11,5 @@ export interface SidebarContextType {
   isMobileOpen: boolean
   toggleCollapse: () => void
   toggleMobileMenu: () => void
+  handleMobileNavigation: () => void
 }
