@@ -22,10 +22,8 @@ export async function signup(formData: FormData) {
         console.error('Authentication sign up error:', error)
         if (error.code === 'user_already_exists') {
             console.error('User already exists!')
-            return
         }
-
-        redirect('/error')
+        redirect('/error?message=' + encodeURIComponent(error.message))
     }
 
     revalidatePath('/', 'layout')
