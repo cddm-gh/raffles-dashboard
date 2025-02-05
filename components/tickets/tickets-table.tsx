@@ -24,10 +24,10 @@ type Ticket = {
   price: string
 }
 
-const getStatusColor = (status: TicketStatus) => {
+const getStatusColor = (status: TicketStatus): "default" | "secondary" | "destructive" | "outline" => {
   switch (status) {
     case "valid":
-      return "success"
+      return "default"
     case "used":
       return "secondary"
     case "cancelled":

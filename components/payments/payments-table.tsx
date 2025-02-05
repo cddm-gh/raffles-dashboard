@@ -26,16 +26,16 @@ type Payment = {
   date: string
 }
 
-const getStatusColor = (status: PaymentStatus) => {
+const getStatusColor = (status: PaymentStatus): "destructive" | "secondary" | "default" | "outline" => {
   switch (status) {
     case "completed":
-      return "success"
+      return "default"
     case "pending":
-      return "warning"
+      return "secondary"
     case "failed":
       return "destructive"
     case "refunded":
-      return "secondary"
+      return "outline"
   }
 }
 

@@ -24,14 +24,14 @@ type Prize = {
   tier: string
 }
 
-const getStatusColor = (status: PrizeStatus) => {
+const getStatusColor = (status: PrizeStatus): "default" | "secondary" | "destructive" | "outline" => {
   switch (status) {
     case "available":
-      return "success"
+      return "default"
     case "awarded":
       return "secondary"
     case "pending":
-      return "warning"
+      return "outline"
   }
 }
 
@@ -52,7 +52,7 @@ const columns: ColumnDef<Prize>[] = [
     accessorKey: "tier",
     header: "Tier",
     cell: ({ row }) => {
-      const tier = row.getValue("tier")
+      const tier = row.getValue("tier") as string
       return (
         <Badge variant="outline">
           {tier}

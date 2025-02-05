@@ -23,14 +23,14 @@ type Raffle = {
   endDate: string
 }
 
-const getStatusColor = (status: RaffleStatus) => {
+const getStatusColor = (status: RaffleStatus): "default" | "secondary" | "destructive" | "outline" => {
   switch (status) {
     case "active":
-      return "success"
+      return "default"
     case "completed":
       return "secondary"
     case "draft":
-      return "default"
+      return "outline"
   }
 }
 
