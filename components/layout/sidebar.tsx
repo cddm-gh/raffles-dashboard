@@ -49,11 +49,11 @@ export function Sidebar() {
   const pathname = usePathname()
 
   return (
-    <div className="flex h-full w-[200px] flex-col border-r bg-background px-3 py-4">
+    <div className="flex h-screen w-[200px] flex-col border-r bg-background px-3 py-4">
       <div className="mb-8 px-4">
         <h1 className="text-xl font-bold">Dashboard</h1>
       </div>
-      <div className="space-y-1">
+      <div className="flex-1 space-y-1">
         {sidebarItems.map((item) => {
           const Icon = item.icon
           return (
