@@ -1,11 +1,12 @@
 import { type EmailOtpType } from '@supabase/supabase-js'
 import { type NextRequest } from 'next/server'
 
-import { createClient } from '@/lib/supabase/server-client'
+import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
+  console.log('In confirm route', searchParams);
   const token_hash = searchParams.get('token_hash')
   const type = searchParams.get('type') as EmailOtpType | null
   const next = searchParams.get('next') ?? '/dashboard'
@@ -21,6 +22,7 @@ export async function GET(request: NextRequest) {
       // redirect user to specified redirect URL or root of app
       redirect(next)
     }
+    console.error('Something failed in confirm', error);
   }
 
   // redirect the user to an error page with some instructions
