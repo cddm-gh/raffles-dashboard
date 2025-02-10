@@ -3,8 +3,9 @@
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { XCircle } from 'lucide-react'
+import { Suspense } from 'react'
 
-export default function ErrorPage() {
+function ErrorContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const errorMessage = searchParams.get('message') || 'Something went wrong'
@@ -36,5 +37,13 @@ export default function ErrorPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function ErrorPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ErrorContent />
+    </Suspense>
   )
 }
