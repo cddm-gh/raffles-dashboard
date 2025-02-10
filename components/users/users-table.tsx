@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useState } from "react"
 import { ColumnDef } from "@tanstack/react-table"
 import {
   DropdownMenu,
@@ -10,14 +11,12 @@ import {
 import { Button } from "@/components/ui/button"
 import { DataTable } from "@/components/ui/data-table"
 import { MoreHorizontal, Pencil, Trash } from "lucide-react"
+import { createClient } from "@/lib/supabase/client"
+import { format } from "date-fns"
+import { Database } from "@/lib/supabase/types"
+import { UsersTableSkeleton } from "./users-table-skeleton"
 
-type User = {
-  id: string
-  name: string
-  email: string
-  role: string
-  createdAt: string
-}
+type User = Database['public']['Tables']['users']['Row']
 
 const columns: ColumnDef<User>[] = [
   {
@@ -29,12 +28,21 @@ const columns: ColumnDef<User>[] = [
     header: "Email",
   },
   {
-    accessorKey: "role",
+    accessorKey: "permission",
     header: "Role",
+    cell: ({ row }) => {
+      const permission = row.getValue("permission") as string | null
+      return permission || "User"
+    }
   },
   {
-    accessorKey: "createdAt",
+    accessorKey: "created_at",
     header: "Created At",
+    cell: ({ row }) => {
+      const date = row.getValue("created_at") as string | null
+      if (!date) return "-"
+      return format(new Date(date), "PP")
+    }
   },
   {
     id: "actions",
@@ -71,23 +79,33 @@ const columns: ColumnDef<User>[] = [
   },
 ]
 
-const data: User[] = [
-  {
-    id: "1",
-    name: "John Doe",
-    email: "john@example.com",
-    role: "User",
-    createdAt: "2/5/2025",
-  },
-  {
-    id: "2",
-    name: "Jane Smith",
-    email: "jane@example.com",
-    role: "Admin",
-    createdAt: "2/5/2025",
-  },
-]
-
 export function UsersTable() {
-  return <DataTable columns={columns} data={data} />
+  const [users, setUsers] = useState<User[]>([])
+  const [loading, setLoading] = useState(true)
+  const supabase = createClient()
+
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const { data } = await supabase
+          .from('users')
+          .select('*')
+          .order('created_at', { ascending: false })
+        
+        setUsers(data || [])
+      } catch (error) {
+        console.error('Error fetching users:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchUsers()
+  }, [])
+
+  if (loading) {
+    return <UsersTableSkeleton />
+  }
+
+  return <DataTable columns={columns} data={users} />
 }
