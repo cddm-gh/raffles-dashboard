@@ -54,23 +54,30 @@ export function AddUserDialog({ open, onOpenChange, onUserAdded }: AddUserDialog
   })
 
   async function onSubmit(data: FormValues) {
-    const supabase = createClient()
-    
+    const supabase = createClient();
+
     try {
-      const { error } = await supabase.from("users").insert([{
-        name: data.name,
+      const { error } = await supabase.auth.signUp({
         email: data.email,
-        phone: data.phone || null,
-        permission: data.permission,
-      }])
+        password: `${data.name}-rifas123`,
+        options: {
+          data: {
+            name: data.name,
+            email: data.email,
+            phone: data.phone || null,
+            permission: data.permission
+          }
+        }
+      });
 
-      if (error) throw error
+      debugger;
+      if (error) throw error;
 
-      form.reset()
-      onOpenChange(false)
-      onUserAdded()
+      form.reset();
+      onOpenChange(false);
+      onUserAdded();
     } catch (error) {
-      console.error("Error adding user:", error)
+      console.error('Error adding user:', error);
     }
   }
 
